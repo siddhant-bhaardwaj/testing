@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+</head>
+
+<body>
+    <html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up Form</title>
+        <link rel="stylesheet" href="https://codepen.io/gymratpacks/pen/VKzBEp#0">
+        <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <style>
+        h1,
+        p {
+            margin: 1em auto;
+            text-align: center;
+        }
+
+        form {
+            width: 60vw;
+            max-width: 500px;
+            min-width: 300px;
+            margin: 0 auto;
+            padding-bottom: 2em;
+        }
+
+        fieldset {
+            border: none;
+            padding: 2rem 0;
+            border-bottom: 3px solid #3b3b4f;
+        }
+
+        fieldset:last-of-type {
+            border-bottom: none;
+        }
+
+        label {
+            display: block;
+            margin: 0.5rem 0;
+        }
+
+        input,
+        textarea,
+        select {
+            margin: 10px 0 0 0;
+            width: 100%;
+            min-height: 2em;
+        }
+
+        input,
+        textarea {
+            background-color: #0a0a23;
+            border: 1px solid #0a0a23;
+            color: #ffffff;
+        }
+
+        .inline {
+            width: unset;
+            margin: 0 0.5em 0 0;
+            vertical-align: middle;
+        }
+
+        input[type="submit"] {
+            display: block;
+            width: 60%;
+            margin: 1em auto;
+            height: 2em;
+            font-size: 1.1rem;
+            background-color: #3b3b4f;
+            border-color: white;
+            min-width: 300px;
+        }
+
+        input[type="file"] {
+            padding: 1px 2px;
+        }
+
+        a {
+            color: #dfdfe2
+        }
+    </style>
+
+    <body>
+        <!-- <form id="messageForm" method="post" name="google-sheet">
+            <input type="text" name="Fname" required>
+            <input type="text" name="Lname" required>
+            <input type="email" name="Email" required>
+            <input type="date" id="date" name="date" value="date">
+            <select name="Goal" required>
+                <option value="qoute">Get a Quote</option>
+                <option value="purchase">Make a purchase</option>
+                <option value="question">Other questions?</option>
+            </select>
+            <textarea name="message" required></textarea>
+            <input type="submit" value="submit" name="submit">
+            <p id="status"></p> <!-- This is for displaying if the message sent correctly -->
+        </form> -->
+        <!-- FORM -->
+        <h1>Registration Form</h1>
+        <p>Please fill out this form with the required information</p>
+        <form id="messageForm" method="post" name="google-sheet">
+
+            <label for="first-name">Enter Your First Name: <input id="first-name" name="Fname" type="text"
+                    required /></label>
+            <label for="last-name">Enter Your Last Name: <input id="last-name" name="Lname" type="text"
+                    required /></label>
+            <label for="email">Enter Your Email: <input id="email" name="Email" type="Email" required /></label>
+
+
+
+            <label for="age">Input your age (years): <input id="Age" type="number" name="Age" min="13"
+                    max="120" /></label>
+            <select name="Goal" required>
+                <option value="qoute">Get a Quote</option>
+                <option value="purchase">Make a purchase</option>
+                <option value="question">Other questions?</option>
+            </select>
+            <textarea name="Message" required></textarea>
+            <input type="date" id="date" name="Date" value="date" style='display:none'>
+            <input type="submit" value="submit" name="submit">
+        </form>
+
+    </html>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $('#date').val(new Date().toJSON().slice(0, 10));
+        const chat_id = '710882939', botID = 'bot5601259124:AAEy5b_A9lgDUkr46DbzHKYKa3gFrxBaZMg';
+        const telegramURL = `https://api.telegram.org/${botID}/sendMessage`;
+        document.querySelector('#messageForm').addEventListener("submit", async e => { // When the user submits the form
+            e.preventDefault(); // Don't submit
+            let text = JSON.stringify( // Convert the form data to a string to send as our Telegram message
+                Object.fromEntries(new FormData(e.target).entries()), // Convert the form data to an object.
+                null, 2); // Prettify the JSON so we can read the data easily
+            const sendMessage = await fetch(telegramURL, { // Send the request to the telegram API
+                method: 'POST',
+                headers: { "Content-Type": "application/json" }, // This is required when sending a JSON body.
+                body: JSON.stringify({ chat_id, text }), // The body must be a string, not an object
+            });
+            const messageStatus = document.querySelector('#status');
+            if (sendMessage.ok) // Update the user on if the message went through
+                messageStatus.textContent = "Message Sent!";
+            else
+                messageStatus.textContent = "Message Failed to send :( " + (await sendMessage.text());
+            e.target.reset(); // Clear the form fields.
+        });
+    </script>
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyAr2DAYA3r5MF1lqt8GGXOtQi3fhinuTpzBz178a-XWpKghWaMqzU-9LKpQrQENrz66Q/exec'
+        const form = document.forms['google-sheet']
+
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => alert("Thanks for Contacting us..! We Will Contact You Soon..."))
+                .catch(error => console.error('Error!', error.message))
+        })
+    </script>
+
+</body>
+
+</html>
